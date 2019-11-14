@@ -1,11 +1,14 @@
-abc="abcdd";
-var foo = {
-abc:"dsfadf",
-bar: function () {
+var data = [];
 
-console.log(this);//输出foo
-console.log(this.abc);//输出dsfadf
-console.log(abc);//输出abcdd
+for (var k = 0; k < 3; k++) {
+// 闭包就是函数中返回一个函数
+  data[k] = (function (k) {
+    return function() {
+        console.log(k);
+    }
+  })(k);
 }
-};
-foo.bar();
+
+data[0](); // 0
+data[1](); // 1
+data[2](); // 2
