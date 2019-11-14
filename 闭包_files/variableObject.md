@@ -62,13 +62,7 @@ function test(a, b) {
     console.log(d, 'asmdfkasd');
   }
 test(2, 3);
-```
-+ 执行代码
-```ruby
- 代码执行期间，会对代码进行修改
-AO['c'] = 10;
-AO['e'] = <reference to FunctionExpression "_e">;
- 那么进入上下文时AO如下：
+那么进入上下文时AO如下：
  AO(test) = {
   a: 10,
   b: undefined,
@@ -76,90 +70,103 @@ AO['e'] = <reference to FunctionExpression "_e">;
   d: <reference to FunctionDeclaration "d">
   e: undefined
 };
-进入上下文时，会根据变量的名称构建AO，x不在AO中是因为这个是函数表达式，_e存在在AO中是因为有变量名称e
-那么什么是函数声明？什么是函数表达式？
-```
- 4. 命名函数表达式
- + 函数创建的方式: 函数声明和函数表达式
- ```ruby
-在ECMA规范中明确了一点就是：函数的声明必须带有identifer即函数名称，表达式则可以省略这个。
-函数声明：
-function 函数名称 () {}
-函数表达式
-function 函数名称(可选))(){}
-如果都有函数名称，则根据上下文来判断是函数表达式还是函数声明。如果函数是作为表达式的一部分则是函数表达式。
-如果是在函数体内或者是在程序内，则是函数声明
-见： 例题三
+进入上下文时，会根据变量的名称构建AO，x不在AO中是因为这个是函数表达式，_e同样是函数表达式，存在在AO中是因为有变量名称e。其中要注意的是对于函数表达式只能在新生成的作用域中访问这个名字，不能在外部访问这个名字。未保存的函数表达式只能在内部进行调用，不能在外部进行调用。
+那么什么是函数声明？什么是函数表达式？参见namedFunctionExpress.md文章
 ```
 ```ruby
-// 例题三
-function f() {} // 函数声明
-var bar = function f(){} // 函数表达式,赋值语句的一部分
-new function bar() {} // 表达式，因为他是new表达式
-// (function(){
-//     function bar(){} // 函数声明，因为是在函数体内
-// })();
-(function(){}); // 函数表达式：包含在分组操作符内，原因是分组操作符内，只能是表达式
-```
-+ 这两种创建方式的区别
-```ruby
-那么函数表达式和函数声明之间有什么区别吗？
-第一：函数声明会在任何表达式被解析和求值之前被解析和求值；
-见例题四：
+另一个例子
+console.log(x); // function，另外函数没有返回值，默认的是undefined
+var x = 10;
+console.log(x); // 10
+x = 20;
+function x() {
+  console.log('nihao');
+  return 'hhh';
+};
+console.log(x); // 20
+知识点：根据规范函数声明是在当进入上下文时填入的，同一周期还有一个同名的变量。那么变量的声明的顺序是在函数声明和形式参数声明之后，而且在变量的声明不会干扰VO中已经存在的同名函数和同名形参。因此VO的结构如下：
+不会干扰是什么意思？？？
 ```
 ```ruby
-// 例题四
-console.log(f1());
-function f1() {
-    return 'Hello World';
-}
-```
-+ 注意的问题
-```ruby
-函数声明在条件语句中的使用在注意，在block语句块的函数语句，不同的浏览器解析不同，作为函数表达式或者函数声明语句
-见例题五
+VO = {};
+VO['x] = <reference to FunctionDeclaration "x">
+找到var x = 10;
+如果function "x"没有已经声明的话
+这时候"x"的值应该是undefined
+但是这个case里变量声明没有影响同名的function的值
+VO['x'] = <the value is not disturbed, still function>
 ```
 ```ruby
-// 例题五
-if(true) {
-    function foo(){
-        console.log('first');
-    }
-} else {
-    function foo(){
-        console.log('second');
-    }
-}
-foo(); // first
-注意：对于不同的浏览器，对block语句中的函数语句有不同的解析，有的会解析成函数声明语句。输出的结果就是 second
-因此建议使用函数表达式的语句
-我们要用函数表达式
-var foo;
+另外一个例子：
 if (true) {
-  foo = function() {
-    return 'first';
-  };
+  var a = 1;
+} else {
+  var b = 2;
 }
-else {
-  foo = function() {
-    return 'second';
-  };
-}
-foo();
+ 
+alert(a); // 1
+alert(b); // undefined,不是b没有声明，而是b的值是undefined
 ```
-+ 函数命名表达式
++ 执行代码
 ```ruby
-什么是函数命名表达式？
-函数必须有名字，且是表达式
-var f = function foo (){}
-函数命名表达式这个名字只能在新生成的函数作用域中访问，不能在外部作用域访问。
-见例题六
+ 代码执行期间，会对代码进行修改
+AO['c'] = 10;
+AO['e'] = <reference to FunctionExpression "_e">;
 ```
+4. 关于变量
+关于变量正确的说法是，变量只能使用var进行声明。
 ```ruby
-// 例题六
-var f2 = function f3() {
-    console.log(f3, 'f3'); // 可以访问f3
-}
-f2(); // 可以访问
-// console.log(f3, 'sdas'); // 不能访问f3
+a = 10; 他不是变量，只是在全局对象上创建了一个新的属性，而不是变量。
+console.log(a, 'a'); // undefined
+console.log(b, 'b'); // 直接报错 b is not defined
+b = 10;
+var a = 20;
 ```
+原因是因为进入上下文和代码执行阶段
+```ruby
+VO = {
+    a: undefiend
+}
+b不是一个变量，所以在上下文阶段b没有在变量对象中。
+b只有在代码执行阶段才出现，看下边的例子
+alert(a); // undefined, 这个大家都知道，
+ 
+b = 10;
+alert(b); // 10, 代码执行阶段创建
+ 
+var a = 20;
+alert(a); // 20, 代码执行阶段修改
+```
+变量有一个特性就是DontDelete，意思是不能用delete直接删除变量
+```ruby
+a = 10;
+console.log(global.a); // 10
+console.log(delete a); // true
+console.log(a); // a is not defined
+var b = 20;
+console.log(b); // 20
+console.log(delete b); // false
+console.log(b); // 20
+```
+5. 特殊的实现
+```ruby
+var global = this;
+var a = 10;
+ 
+function foo() {}
+ 
+console.log(foo.__parent__); // global
+ 
+var VO = foo.__parent__;
+ 
+console.log(VO.a); // 10
+console.log(VO === global); // true
+```
+### 总结
+变量对象：全局的变量对象、局部的变量对象
+全局的变量对象存储的是全局中声明的变量（变量只有使用var声明才是变量，不使用var就是在全局对象上添加了新的属性）
+和函数（是函数声明，不是函数表达式，这里要区分什么是函数声明和函数表达式）
+局部变量对象是在函数中进入上下文之前的对象，用于存储变量、函数、形参。
+那么整个代码的执行分为两个阶段：进入上下文阶段和代码执行
+进入上下文阶段会构建OA对象，具体的要了解是如何构建的
+在代码执行阶段，就是要替换代码
