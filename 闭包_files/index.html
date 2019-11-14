@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>闭包</title>
+  </head>
+  <body>
+    <input id='email' />
+    <input id='name' />
+    <input id='age' />
+    <script>
+    function fn() {
+      name = '你我贷';
+    }
+    // 例子一： 什么是闭包
+      function f1() {
+        nAdd = function() {
+          n += 2;
+        };
+        var n = 999;
+        // 函数是一个匿名的函数，相当于闭包。匿名函数为什么是相当于一个闭包？？？？
+        function f2() {
+          // alert是阻塞的
+          console.log(n, 'n');
+        }
+        return f2;
+      }
+      var result = f1();
+      result();
+      nAdd();
+      result();
+
+      // 例子二：闭包中的this指向
+      var name = 'the window';
+      var object = {
+        name: 'myObject',
+        getNameFunc() {
+          return function() {
+            console.log(this.name, 'this.name');
+          };
+        }
+      };
+      // 考察的是闭包和this的指向
+      // this指向的是window
+      // this指向是动态指向的，是谁调用指向谁。
+      object.getNameFunc()();
+
+      // 例子三：闭包中的this指向
+      var name2 = 'name2';
+      var object = {
+        name2: 'hahahha',
+        getNameFunc: function() {
+          // 这里的this指向的是对象,是指向调用getNameFunc的对象
+          var that = this;
+          return function() {
+             console.log(that.name2);
+          };
+        }
+      };
+      object.getNameFunc()();
+      // 例四：利用闭包创建私有变量
+      var Counter = (function() {
+        // 变量
+        var private = 0;
+        // 方法
+        function changeBy(val) {
+          private += val;
+        }
+        // 返回一个对象
+        return {
+          increment: function() {
+            changeBy(1);
+          },
+          decrement: function() {
+            changeBy(-1);
+          },
+          value: function() {
+            return private;
+          }
+        };
+      })();
+      console.log(Counter.value());
+      Counter.increment();
+      Counter.increment();
+      console.log(Counter.value());
+      Counter.decrement();
+      console.log(Counter.value()); /* 提示 1 */
+      // 例五: 例子的目的是点击不同的输入框，提示不同的内容。
+      function showHelp(id, help) {
+        console.log(id, help, 'id', 'help');
+      }
+      function setupHelp(help) {
+        var helpText = [
+          { id: 'email', help: 'Youeaaa' },
+          { id: 'name', help: 'Your full name' },
+          { id: 'age', help: 'Your age (you must be over 16)' }
+        ];
+        for (let i = 0; i < helpText.length; i++) {
+          var item = helpText[i];
+          document.getElementById(item.id).onfocus = function(item) {
+            showHelp(item.id, item.help);
+          };
+        }
+      }
+      setupHelp();
+      // 延伸扩展
+      var a = 10;
+      (function(){
+        var b = 20;
+      })();
+      console.log(a, 'a');
+      console.log(b, 'b'); // 报错b不是全局的变量
+      console.log('niaho'); // 后边的代码不执行了
+    </script>
+  </body>
+</html>
