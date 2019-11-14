@@ -82,3 +82,5 @@ var f2 = function f3() {
 f2(); // 可以访问
 // console.log(f3, 'sdas'); // 不能访问f3
 ```
+### 参考链接
+深入理解JavaScript系列（2）：揭秘命名函数表达式（https://www.cnblogs.com/TomXu/archive/2011/12/29/2290308.html）

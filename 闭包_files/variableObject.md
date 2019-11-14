@@ -170,3 +170,7 @@ console.log(VO === global); // true
 那么整个代码的执行分为两个阶段：进入上下文阶段和代码执行
 进入上下文阶段会构建OA对象，具体的要了解是如何构建的
 在代码执行阶段，就是要替换代码
+
+### 参考链接
+汤姆大叔的博客 
+深入理解JavaScript系列（12）：变量对象（Variable Object）（https://www.cnblogs.com/TomXu/archive/2012/01/16/2309728.html）
