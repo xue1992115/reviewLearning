@@ -16,6 +16,24 @@ VO(test functionContext) = {
     x: 30,
     b: 20
 };
+```
+```ruby
+例题一：函数上下文的对象
+function foo(a, b, z) {
+    // 函数的length指的是形参的个数
+    console.log(foo.length, 'foo.length');
+    // arguments.length指的是实参的个数
+    console.log(arguments.length, 'arguments.length');
+    // arguments.callee是函数自身
+    console.log(arguments.callee === foo, 'callee === foo');
+    z = 30;
+    console.log(arguments[2], 'arguments[2]');
+    console.log(z, 'z');
+    // arguments中的properties-indexs内部元素的个数等于arguments.length,没有传进来的参数和properties-indexs的值是不共享的
+    console.log(arguments[0], 'properties-indexs');
+}
+foo(1, 2, 3);
+```
 函数上下文中的对象，在函数执行上下文中，VO(function text)指的是AO
 AO是在进入函数上下文时刻创建的，通过函数的arguments属性初始化。arguments属性的值是arguments对象。
 ```
@@ -31,6 +49,19 @@ AO = {
 函数声明：名称和对应的值，组成一个对象，变量对象名如果已经存在，后者会替换前者。
 变量声明：名称和对应的值，组成对象，值如果没有传递就是undefined。
 见例题二
+```
+```ruby
+// 例题二： 进入上下文之前
+function test(a, b) {
+    var c = 10;
+    function d() {}
+    var e = function _e() {};
+    (function x() {
+        console.log('x');
+    });
+    console.log(d, 'asmdfkasd');
+  }
+test(2, 3);
 ```
 + 执行代码
 ```ruby
@@ -60,16 +91,61 @@ function 函数名称(可选))(){}
 如果是在函数体内或者是在程序内，则是函数声明
 见： 例题三
 ```
+```ruby
+// 例题三
+function f() {} // 函数声明
+var bar = function f(){} // 函数表达式,赋值语句的一部分
+new function bar() {} // 表达式，因为他是new表达式
+// (function(){
+//     function bar(){} // 函数声明，因为是在函数体内
+// })();
+(function(){}); // 函数表达式：包含在分组操作符内，原因是分组操作符内，只能是表达式
+```
 + 这两种创建方式的区别
 ```ruby
 那么函数表达式和函数声明之间有什么区别吗？
 第一：函数声明会在任何表达式被解析和求值之前被解析和求值；
 见例题四：
 ```
+```ruby
+// 例题四
+console.log(f1());
+function f1() {
+    return 'Hello World';
+}
+```
 + 注意的问题
 ```ruby
 函数声明在条件语句中的使用在注意，在block语句块的函数语句，不同的浏览器解析不同，作为函数表达式或者函数声明语句
 见例题五
+```
+```ruby
+// 例题五
+if(true) {
+    function foo(){
+        console.log('first');
+    }
+} else {
+    function foo(){
+        console.log('second');
+    }
+}
+foo(); // first
+注意：对于不同的浏览器，对block语句中的函数语句有不同的解析，有的会解析成函数声明语句。输出的结果就是 second
+因此建议使用函数表达式的语句
+我们要用函数表达式
+var foo;
+if (true) {
+  foo = function() {
+    return 'first';
+  };
+}
+else {
+  foo = function() {
+    return 'second';
+  };
+}
+foo();
 ```
 + 函数命名表达式
 ```ruby
@@ -78,4 +154,12 @@ function 函数名称(可选))(){}
 var f = function foo (){}
 函数命名表达式这个名字只能在新生成的函数作用域中访问，不能在外部作用域访问。
 见例题六
+```
+```ruby
+// 例题六
+var f2 = function f3() {
+    console.log(f3, 'f3'); // 可以访问f3
+}
+f2(); // 可以访问
+// console.log(f3, 'sdas'); // 不能访问f3
 ```
