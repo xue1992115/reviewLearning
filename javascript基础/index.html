@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+// 例题一
+// setTimeout(()=>{
+//   console.log("setTimeout1");
+//   Promise.resolve().then(data => {
+//       console.log(222);
+//   });
+// });
+// setTimeout(()=>{
+//   console.log("setTimeout2");
+// });
+// Promise.resolve().then(data=>{
+//   console.log(111);
+// });
+// 111 setTimeout1 222 setTimeout2
+
+// 例题二
+// console.log('script start');
+
+// setTimeout(function () {
+//     console.log('setTimeout---0');
+// }, 0);
+
+// setTimeout(function () {
+//     console.log('setTimeout---200');
+//     setTimeout(function () {
+//         console.log('inner-setTimeout---0');
+//     });
+//     Promise.resolve().then(function () {
+//         console.log('promise5');
+//     });
+// }, 200);
+
+// Promise.resolve().then(function () {
+//     console.log('promise1');
+// }).then(function () {
+//     console.log('promise2');
+// });
+// Promise.resolve().then(function () {
+//     console.log('promise3');
+// });
+// console.log('script end');
+// 执行顺序：script start，script end，promise1，promise3，promise2，setTimeout---0，setTimeout---200，promise5，inner-setTimeout---0
+// 例题三
+// console.log("1")
+
+// setTimeout(function() {
+//     console.log("2")
+//     new Promise(function(resolve) {
+//         console.log("3")
+//         resolve()
+//     }).then(function() {
+//         console.log("4")
+//     })
+// }, 0)
+
+// new Promise(function(resolve) {
+//     console.log("5")
+//     resolve()
+// }).then(function() {
+//     console.log("6")
+//     setTimeout(function() {
+//         console.log("7")
+//     })
+// })
+
+// console.log("8")
+// 例题四
+setTimeout(() => {
+  console.log('setTimeout1');
+  setTimeout(() => {
+    console.log('setTimeout2');
+  });
+  process.nextTick(() => {
+    console.log('nextTick');
+  });
+});
+
+setTimeout(() => {
+  console.log('setTimeout3');
+});
+</script>
+</html>
