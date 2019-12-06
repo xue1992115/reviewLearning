@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+</body>
+<script>
+// 事件监听
+    // HTML内联属性onClick，这种方式只能绑定一个处理事件，绑定多个会覆盖前面的函数
+    // <button onclick="alert('你点击了这个按钮');">点击这个按钮</button>
+// 事件监听函数
+    // element.addEventListener(<event-name>, <callback>, <use-capture>);
+    // 可以在element上添加一个事件监听，当监听到的事件发生的时候，会调用这个回调函数。第三个参数true表示在捕获阶段监听
+    // false表示的冒泡阶段监听
+// 事件触发过程
+    // 冒泡阶段：当事件达到目标节点之后，就会沿着原路返回，由于这个过程类似水泡从底部浮到顶部，所以称作冒泡阶段。
+    // 捕获阶段：这个事件从 Window 发出，不断经过下级节点直到目标节点。在到达目标节点之前的过程，就是捕获阶段
+    // 目标阶段：跑到了事件触发目标节点那里，最终在目标节点上触发这个事件，就是目标阶段。
+// 事件代理
+    // 因为事件有冒泡机制，所有子节点的事件都会顺着父级节点跑回去，所以我们可以通过监听父级节点来实现监听子节点的功能，这就是事件代理。
+    // 减少事件绑定，提升性能。之前你需要绑定一堆子节点，而现在你只需要绑定一个父节点即可。减少了绑定事件监听函数的数量。
+    // 动态变化的 DOM 结构，仍然可以监听。当一个 DOM 动态创建之后，不会带有任何事件监听，除非你重新执行事件监听函数，而使用事件监听无须担忧这个问题。
+</script>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+</body>
+<script>
+// == 和 === 的比较
+// ===比较规则
+/** 
+ * 先比较类型，然后比较值，比较简单
+ * 特殊的例子： NaN 和 +0 -0 NaN 不能和自身比较，-0和+0是相等的
+*/
+// ===例子
+// 引用类型比较的是引用的地址
+console.log(true === true, 'true === true'); // true
+console.log(1 === 1, '1 === 1'); // true
+console.log(undefined === undefined, 'undefined === undefined'); // true
+console.log(null === null, 'null === null'); // true
+console.log([] === [], '[] === []'); // false
+console.log({} === {}, '{} === {}'); // false
+console.log('1' === '1', "'1' === '1'"); // true
+console.log(NaN === NaN, "NaN === NaN"); // false
+console.log(0 === -0, "0 === -0"); // true
+
+// == 例子
+console.log(undefined == null, 'undefined == null');
+// == 隐世转换的原则
+// 1、undefned和null, 除了和自身比返回true之外，其他的都是返回false
+// 2、Number类型和其他的比较，其他的类型都会转换成数值类型的
+// 3、Boolean类型的和其他的值比较会将自身转换成Number类型的
+// 4、Object类型的会将自己转换成toPrimitive()函数
+// 5、String类型
+// 除上述的情况外，还有几种特殊的情况
+console.log(0 == [], "0 == []"); // true
+console.log("0" == false, '"0" == false'); // true
+console.log(false == "", 'false == " "'); // true
+console.log(false == [], 'false == []'); // true
+console.log("" == 0, '"" == 0'); // true
+console.log("" == [], '"" == []'); // true
+console.log(0 == [], '0 == []'); // true
+// 产生上述情况的原因
+// toPrimitive是调用A的A.toString()和A.valueOf()将A转换为原始类型
+// [] == [] false的原因是和原始值和引用值的存储方式不一样有关系，原始值是存放在栈中的，引用类型是存放在堆中的。原因是因为引用类型是动态变化的。存放在堆中的。
+// [] == ![] []是对象，隐世转换成true，![]则是false，结果是[] == toNumber(false);
+// [] == 0 是将[]调用toPrimitive,如果是原始的值，返回。否则调用obj.valueOf(),如果是原始值返回。obj.toString(),如果是原始值返回。否则抛出异常。
+// 调用valueOf是返回对象的原始值
+var obj = {};
+console.log(obj.toString());//[object Object]
+
+var arr2 = [];
+console.log(arr2.toString());//""空字符串
+  
+var date = new Date();
+console.log(date.toString());//Sun Feb 28 2016 13:40:36 GMT+0800 (中国标准时间)
+// valueOf方法返回对象的原始值，可能是字符串、数值或bool值等，看具体的对象。
+// 原始值是指['Null','Undefined','String','Boolean','Number']
+var obj = {
+  name: "obj"
+};
+console.log(obj.valueOf());//Object {name: "obj"}
+// 总结四条规则
+// 1. undefined == null，结果是true。且它俩与所有其他值比较的结果都是false。
+// 2. String == Boolean，需要两个操作数同时转为Number。
+// 3. String/Boolean == Number，需要String/Boolean转为Number。
+// 4. Object == Primitive，需要Object转为Primitive(具体通过valueOf和toString方法)。
+//  参考文章
+// https://github.com/jawil/blog/issues/1
+</script>
+
+</html>

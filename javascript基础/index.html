@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src='./作用域问题.js'>
+    </script>
 </head>
 <body>
     
@@ -77,18 +79,18 @@
 
 // console.log("8")
 // 例题四
-setTimeout(() => {
-  console.log('setTimeout1');
-  setTimeout(() => {
-    console.log('setTimeout2');
-  });
-  process.nextTick(() => {
-    console.log('nextTick');
-  });
-});
+// setTimeout(() => {
+//   console.log('setTimeout1');
+//   setTimeout(() => {
+//     console.log('setTimeout2');
+//   });
+//   process.nextTick(() => {
+//     console.log('nextTick');
+//   });
+// });
 
-setTimeout(() => {
-  console.log('setTimeout3');
-});
+// setTimeout(() => {
+//   console.log('setTimeout3');
+// });
 </script>
 </html>

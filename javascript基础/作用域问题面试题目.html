@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 面试题目一：
+    var a = 10;
+    function aaa() {
+      console.log(a, 'a');
+    }
+    aaa(); //a 为外部变量即全局变量，所以可以直接访问到 结果为10
+
+    // 面试题目二
+    function bbb() {
+      var b = 10;
+    }
+    bbb();
+    // console.log(b); //b 为局部的变量，所以b is not defined
+
+    // 面试题目三
+    var c = 10;
+    function ccc() {
+      console.log(c, 'c'); // 输出10
+      // console.log(d, 'd'); // d is not defined
+    }
+    function ddd() {
+      var d = 20;
+      var c = 1;
+      ccc();
+    }
+    ddd(); //结果为10，因为ccc()函数不能访问到ddd()里面的局部变量，应该访问的是c=10,这个全局变量。
+
+    // 面试题目四
+    // 没有var声明的变量是全局的变量
+    function eee() {
+      // console.log(e, 'innerE');  // 报错Error
+      e = 10;
+    }
+    eee();
+    console.log(e, 'e'); //结果为10;
+
+    // 面试题目五
+    // 未声明的变量赋值，这个变量是全局的变量
+    function fff() {
+      var f = (g = 10);
+    }
+    fff();
+    //  console.log(f, 'f');//结果为,无法访问到
+    console.log(g, 'g'); //结果为10；
+
+    // 面试题目六
+    // 变量的查找是就近原则去查找的，第二变量的声明被提到作用域顶部，赋值语句则留在原地
+    function hhh() {
+      console.log(h, 'h'); // undefined, 变量提升
+      var h = 1;
+    }
+    hhh();
+    // 等同于
+    // var a=10;
+    // function aaa(){
+    //   var a; //声明提前了
+    //   alert(a);
+    //   a=20; //赋值扔留着原地
+    // }
+    // aaa();
+
+    // 面试题目七
+    // 形参和局部变量重名的时候,形参的优先级高于局部变量
+    var i = 10;
+    function iii(i) {
+      console.log(i, 'i'); // 10
+      var i = 20; //因为 a 是形参，优先级高于 var a; 所以 局部变量a的声明其实被忽略了。
+    }
+    iii(i); //结果为：10
+    // 面试题目八
+    var j = [1, 2, 3];
+    var k = j;
+    k.push(4);
+    console.log(k, 'k'); //结果为[1,2,3,4] 当b改变的时候a也发生了改变
+
+    // 当b重新被赋值的时候 a不会改变.示例：
+    var l = [1, 2, 3];
+    var m = l;
+    m = [1, 2, 3, 4];
+    console.log(m, 'm'); //结果为[1,2,3,4]
+    console.log(l, 'l'); //结果为[1,2,3]
+
+    // 面试题目九
+    // 变量提升和函数提升
+    fn1(); // fn1
+    // fn2(); // 报错无法执行
+    function fn1() {
+      console.log('fn1');
+    }
+    var fn2 = function fn2() {
+      console.log('fn2');
+    };
+    // 面试题目十
+    // 函数的提升在变量提升之前
+    console.log(n, 'n'); // function n
+    var n = 'n';
+    function n() {
+      console.log('function n');
+    }
+    // 等同于
+    var o = function() {
+      console.log(10);
+    };
+    var o;
+    console.log(o); // f a() {console.log(10)}
+    console.log(o()); //  undefined
+    o = 3;
+    console.log(o); //3
+    o = 6;
+    // console.log(o()); //o() is not a function;
+
+    // 面试题目十一 解释函数提升和变量提升
+    console.log(typeof test, 'test'); // function
+    var test = 2;
+    function test() {
+      console.log(3);
+    }
+
+    // 另一个题目
+    var test2 = 2;
+    function test2() {
+      console.log(3);
+    }
+    console.log(typeof test2, 'test2'); // number
+    // 面试题目十二
+    // 代码1
+    // for (var i = 0; i < 10; i++) {
+    //   setTimeout(function() {
+    //     console.log(i);
+    //   }, i * 2000);
+    // }
+    // // 代码2
+    // for (var i = 0; i < 10; i++) {
+    //   (function(i) {
+    //     setTimeout(function() {
+    //       console.log(i);
+    //     }, i * 2000);
+    //   })(i);
+    // }
+    // 面试题目十三
+    // 考察作用域和作用域链的相关的知识，作用域链和作用域是都是静态的概念是在函数定义的时候就已经确定的。
+    // 通过函数作用域查找的时候，首先查找的是函数作用域中的，然后沿着作用域链向上查找。
+    var fn11 = 10;
+    function fnhaha() {
+      console.log(fn11, 'fn11');
+    }
+
+    function fn222(f) {
+      var fn11 = 20;
+      f();
+    }
+
+    fn222(fnhaha);
+
+    // 面试题目十四
+    var p = function() {
+      console.log(p, 'p'); // p函数的字符串形式
+    };
+    p();
+
+    var obj = {
+      q: function() {
+        // console.log(q, 'q'); // q is not defined
+      }
+    };
+    obj.q();
+
+    /**
+     * 总结：
+     * 局部作用域和全局作用域
+     * 作用域和作用域链，静态概念在函数定义的时候已经存在了
+     * 变量的提升和函数的提升
+     * 其实无论哪种形式的声明，都存在变量的提升，但是var声明后的变量会肤质为undefined，let const声明的变量不会赋值，并且形成暂时性死区。
+     * 
+    */
+  </script>
+</html>
